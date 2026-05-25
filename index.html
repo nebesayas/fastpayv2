@@ -33,6 +33,19 @@ const CONFIG = {
   BOWLS_PROCESSED:     "1,400+",               // bowls processed in testing
   CHECKOUT_TIME:       "8 seconds",             // avg checkout time
 
+  // ── ROI Calculator Defaults ─────────────────────────────────────
+  ROI_BOWLS_DEFAULT:   250,                     // default slider value
+  ROI_BOWLS_MIN:       50,                      // lowest bowls/day shown
+  ROI_BOWLS_MAX:       800,                     // highest bowls/day shown
+  ROI_WAGE_DEFAULT:    18,                      // default cashier wage per hour
+  ROI_WAGE_MIN:        12,                      // lowest wage shown
+  ROI_WAGE_MAX:        28,                      // highest wage shown
+  ROI_CASHIERS_DEFAULT: 2,                      // default cashiers on shift
+  ROI_CASHIERS_MIN:    1,                       // lowest cashiers shown
+  ROI_CASHIERS_MAX:    4,                       // highest cashiers shown
+  OPERATING_HOURS_DAY: 8,                       // labor hours per cashier per day
+  OPERATING_DAYS_MONTH: 26,                     // operating days per month
+
   // ── Financials ───────────────────────────────────────────────────
   MONTHLY_PER_LOCATION: "$490",                 // SaaS fee per location/month
   HARDWARE_COST:        "$184",                 // one-time hardware cost
@@ -115,7 +128,11 @@ body {
   font-size: 16px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
+
+button, input { font: inherit; }
+button { min-height: 44px; }
 
 /* ── Nav ───────────────────────────────────────────────────────────── */
 nav {
@@ -535,6 +552,15 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; }
 .roi-divider { height: 1px; background: rgba(253,250,246,0.1); margin: 32px 0; }
 
 /* ── Comparison ────────────────────────────────────────────────────── */
+.comparison-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-lg);
+}
+
+.comparison-scroll .comparison-table { min-width: 760px; }
+
 .comparison-table {
   width: 100%;
   border-collapse: separate;
@@ -944,17 +970,64 @@ footer {
 }
 
 /* ── Responsive ────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  nav {
+    height: auto;
+    min-height: 64px;
+    padding: 10px 20px;
+    gap: 12px;
+  }
+
+  .nav-tabs { order: 3; width: 100%; justify-content: center; }
+  .nav-tab { flex: 1; padding: 8px 10px; }
+  .page { padding-top: 108px; }
   .steps-grid, .features-grid, .opp-grid, .model-grid, .roi-wrap { grid-template-columns: 1fr; }
   .roi-left { border-right: none; border-bottom: 1px solid var(--warm-border); }
   .raise-card { grid-template-columns: 1fr; gap: 40px; padding: 40px; }
-  nav { padding: 0 20px; }
-  .container { padding: 0 20px; }
-  .hero-inner, .inv-hero-inner { padding: 60px 20px; }
-  .metrics-bar { flex-direction: column; }
-  .metric-item { border-right: none; border-bottom: 1px solid var(--warm-border); }
-  .comparison-table { font-size: 0.8rem; }
-  .comparison-table th, .comparison-table td { padding: 14px 16px; }
+  .metrics-bar { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .metric-item { border-right: 1px solid var(--warm-border); border-bottom: 1px solid var(--warm-border); }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  nav { padding: 10px 16px; }
+  .nav-logo { font-size: 1.35rem; }
+  .nav-cta { display: none; }
+  .container { padding: 0 18px; }
+  .section { padding: 64px 0; }
+  .hero { min-height: auto; }
+  .hero-inner, .inv-hero-inner { padding: 54px 18px; }
+  .hero-title { font-size: clamp(2.45rem, 15vw, 4rem); }
+  .hero-sub, .inv-hero-sub { font-size: 1rem; line-height: 1.65; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-outline { width: 100%; padding: 13px 18px; }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 18px;
+    margin-top: 56px;
+    padding-top: 36px;
+  }
+  .hero-stat-value { font-size: 2rem; }
+  .step, .feature-card, .opp-card, .model-card, .team-card { padding: 30px 24px; }
+  .roi-left, .roi-right { padding: 36px 24px; }
+  .roi-result-value { font-size: 2.25rem; overflow-wrap: anywhere; }
+  .cta-inner { padding: 72px 0; }
+  .cta-form { flex-direction: column; }
+  .cta-input { width: 100%; }
+  .inv-hero { padding: 72px 0 48px; }
+  .metrics-bar { grid-template-columns: 1fr; margin-top: 40px; }
+  .metric-item { border-right: none; padding: 28px 24px; }
+  .raise-card { padding: 32px 24px; }
+  .raise-terms { grid-template-columns: 1fr; gap: 24px; }
+  .roadmap { padding-left: 16px; }
+  .roadmap-item { padding-left: 28px; }
+  footer { padding: 36px 18px; }
+}
+
+@media (max-width: 380px) {
+  .hero-stats { grid-template-columns: 1fr; }
+  .nav-tab { font-size: 0.76rem; letter-spacing: 0.04em; }
 }
 </style>
 </head>
@@ -1159,7 +1232,8 @@ footer {
       <span class="label">How We Compare</span>
       <h2 class="section-title">No other system does what FastPay does.</h2>
       <div class="divider"></div>
-      <table class="comparison-table fade-in">
+      <div class="comparison-scroll fade-in">
+      <table class="comparison-table">
         <thead>
           <tr>
             <th>Capability</th>
@@ -1214,6 +1288,7 @@ footer {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
   </section>
 
@@ -1359,25 +1434,42 @@ function scrollToContact() {
 }
 
 // ── ROI Calculator ──────────────────────────────────────────────────
+function initROIControls() {
+  const sliders = [
+    ['roi-bowls', CONFIG.ROI_BOWLS_MIN, CONFIG.ROI_BOWLS_MAX, CONFIG.ROI_BOWLS_DEFAULT],
+    ['roi-wage', CONFIG.ROI_WAGE_MIN, CONFIG.ROI_WAGE_MAX, CONFIG.ROI_WAGE_DEFAULT],
+    ['roi-cashiers', CONFIG.ROI_CASHIERS_MIN, CONFIG.ROI_CASHIERS_MAX, CONFIG.ROI_CASHIERS_DEFAULT],
+  ];
+
+  sliders.forEach(([id, min, max, value]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.min = min;
+    el.max = max;
+    el.value = value;
+  });
+}
+
 function calcROI() {
   const bowls    = +document.getElementById('roi-bowls').value;
   const wage     = +document.getElementById('roi-wage').value;
   const cashiers = +document.getElementById('roi-cashiers').value;
-  const hoursPerDay = 8;
-  const daysPerMonth = 26;
+  const hoursPerDay = CONFIG.OPERATING_HOURS_DAY;
+  const daysPerMonth = CONFIG.OPERATING_DAYS_MONTH;
   const monthlyLabor = wage * hoursPerDay * cashiers * daysPerMonth;
   const annualLabor  = monthlyLabor * 12;
-  const fee = 490;
+  const fee = Number(String(CONFIG.MONTHLY_PER_LOCATION).replace(/[^0-9.]/g, '')) || 0;
+  const hardware = Number(String(CONFIG.HARDWARE_COST).replace(/[^0-9.]/g, '')) || 0;
   const netMonthly = monthlyLabor - fee;
-  const payback = Math.ceil(184 / (netMonthly / daysPerMonth));
+  const payback = netMonthly > 0 ? Math.ceil(hardware / (netMonthly / daysPerMonth)) : 'N/A';
 
   document.getElementById('bowls-display').textContent    = bowls;
   document.getElementById('wage-display').textContent     = '$' + wage;
   document.getElementById('cashiers-display').textContent = cashiers;
   document.getElementById('roi-monthly').textContent      = '$' + netMonthly.toLocaleString();
   document.getElementById('roi-annual').textContent       = '$' + annualLabor.toLocaleString();
-  document.getElementById('roi-fee').textContent          = '$' + fee;
-  document.getElementById('roi-payback').textContent      = payback + ' days';
+  document.getElementById('roi-fee').textContent          = '$' + fee.toLocaleString();
+  document.getElementById('roi-payback').textContent      = payback === 'N/A' ? 'N/A' : payback + ' days';
 }
 
 // ── Investor Page Builder ───────────────────────────────────────────
@@ -1535,6 +1627,7 @@ function initObserver() {
 // ── Init ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   buildInvestorPage();
+  initROIControls();
   calcROI();
   initObserver();
 });

@@ -9,47 +9,43 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
 <script>
-// ═══════════════════════════════════════════════════════════════════
-//  INVESTOR PAGE CONFIG — EDIT THESE VALUES FREELY
-//  No coding knowledge needed. Save the file and refresh your browser.
-// ═══════════════════════════════════════════════════════════════════
 
 const CONFIG = {
 
   // ── Company ──────────────────────────────────────────────────────
   COMPANY_NAME:        "FastPay",
   TAGLINE:             "Intelligent Checkout for Fast Casual",
-  CONTACT_RESTAURANT:  "hello@fastpay.ai",     // restaurant inquiries
-  CONTACT_INVESTOR:    "invest@fastpay.ai",     // investor inquiries
+  CONTACT_RESTAURANT:  "nebesayas14@gmail.com",     // restaurant inquiries
+  CONTACT_INVESTOR:    "nebesayas14@gmail.com",     // investor inquiries
 
   // ── Market Size ──────────────────────────────────────────────────
-  TAM:                 "$240B",                 // total addressable market
-  CASHIER_LABOR_COST:  "$54B",                  // annual US cashier labor
-  FAST_CASUAL_UNITS:   "200,000+",              // fast casual locations in US
+  TAM:                 "99B+",                 // total addressable market
+  CASHIER_LABOR_COST:  "$20",                  // annual US cashier labor
+  FAST_CASUAL_UNITS:   "44,000+",              // fast casual locations in US
 
   // ── Traction ─────────────────────────────────────────────────────
-  DETECTION_ACCURACY:  "92%",                   // current model accuracy
-  PILOT_LOCATIONS:     "3",                     // live pilot locations
-  BOWLS_PROCESSED:     "1,400+",               // bowls processed in testing
+  EXPECTDE_DETECTION_ACCURACY:  "99%",                   // current model accuracy
+  PILOT_LOCATIONS:     "1",                     // live pilot locations
+  BOWLS_PROCESSED:     "30",               // bowls processed in testing
   CHECKOUT_TIME:       "8 seconds",             // avg checkout time
 
   // ── ROI Calculator Defaults ─────────────────────────────────────
   ROI_BOWLS_DEFAULT:   250,                     // default slider value
   ROI_BOWLS_MIN:       50,                      // lowest bowls/day shown
   ROI_BOWLS_MAX:       800,                     // highest bowls/day shown
-  ROI_WAGE_DEFAULT:    18,                      // default cashier wage per hour
+  ROI_WAGE_DEFAULT:    20,                      // default cashier wage per hour
   ROI_WAGE_MIN:        12,                      // lowest wage shown
   ROI_WAGE_MAX:        28,                      // highest wage shown
   ROI_CASHIERS_DEFAULT: 2,                      // default cashiers on shift
   ROI_CASHIERS_MIN:    1,                       // lowest cashiers shown
   ROI_CASHIERS_MAX:    4,                       // highest cashiers shown
-  OPERATING_HOURS_DAY: 8,                       // labor hours per cashier per day
-  OPERATING_DAYS_MONTH: 26,                     // operating days per month
+  OPERATING_HOURS_DAY: 11.5,                       // labor hours per cashier per day
+  OPERATING_DAYS_MONTH: 30,                     // operating days per month
 
   // ── Financials ───────────────────────────────────────────────────
-  MONTHLY_PER_LOCATION: "$490",                 // SaaS fee per location/month
-  HARDWARE_COST:        "$184",                 // one-time hardware cost
-  GROSS_MARGIN:         "91%",                  // gross margin at scale
+  MONTHLY_PER_LOCATION: "$399",                 // SaaS fee per location/month
+  HARDWARE_COST:        "$290",                 // one-time hardware cost
+  GROSS_MARGIN:         "92%",                  // gross margin at scale
   BREAK_EVEN_DAYS:      "11",                   // days to hardware payback
   ARR_TARGET_12MO:      "$1.2M",               // 12-month ARR target
   ARR_TARGET_24MO:      "$6M",                  // 24-month ARR target
@@ -1477,14 +1473,14 @@ function buildInvestorPage() {
   const C = CONFIG;
 
   // Hero stats
-  document.getElementById('stat-accuracy').textContent  = C.DETECTION_ACCURACY;
+  document.getElementById('stat-accuracy').textContent  = C.EXPECTED_DETECTION_ACCURACY;
   document.getElementById('stat-checkout').textContent  = C.CHECKOUT_TIME;
   document.getElementById('stat-payback').textContent   = C.BREAK_EVEN_DAYS + ' days';
 
   // Metrics bar
   document.getElementById('inv-metrics-bar').innerHTML = `
     <div class="metric-item"><div class="metric-value">${C.TAM}</div><div class="metric-label">Total Addressable Market</div></div>
-    <div class="metric-item"><div class="metric-value">${C.DETECTION_ACCURACY}</div><div class="metric-label">Detection Accuracy</div></div>
+    <div class="metric-item"><div class="metric-value">${C.EXPECTED_DETECTION_ACCURACY}</div><div class="metric-label">Detection Accuracy</div></div>
     <div class="metric-item"><div class="metric-value">${C.PILOT_LOCATIONS}</div><div class="metric-label">Pilot Locations</div></div>
     <div class="metric-item"><div class="metric-value">${C.GROSS_MARGIN}</div><div class="metric-label">Gross Margin at Scale</div></div>
     <div class="metric-item"><div class="metric-value">${C.ARR_TARGET_12MO}</div><div class="metric-label">12-Month ARR Target</div></div>
